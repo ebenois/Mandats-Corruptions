@@ -1,87 +1,26 @@
-import { useState } from "react";
-import poligraphService from "./services/poligraphService";
-import "./assets/firebase";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
 
-export default function App() {
-  const [search, setSearch] = useState("");
-  const [politicians, setPoliticians] = useState([]);
-  const [selected, setSelected] = useState(null);
-  const [loading, setLoading] = useState(false);
+import HomePage from "./pages/HomePage";
+import CollectionPage from "./pages/CollectionPage";
+import FightPage from "./pages/FightPage";
+import DeckPage from "./pages/DeckPage";
 
-  const handleSearch = async () => {
-    if (!search.trim()) return;
-
-    setLoading(true);
-    const results = await poligraphService.searchPoliticiansByName(search);
-    setPoliticians(results);
-    setSelected(null);
-    setLoading(false);
-  };
-
-  const handleSelect = async (slug) => {
-    setLoading(true);
-    const politician = await poligraphService.findPoliticianBySlug(slug);
-    setSelected(politician);
-    setLoading(false);
-  };
-
+function App() {
   return (
-    <div style={{ fontFamily: "Arial", padding: 20 }}>
-      <h1>Test API Poligraph</h1>
+    <BrowserRouter>
 
-      <div style={{ marginBottom: 20 }}>
-        <input
-          type="text"
-          placeholder="Rechercher un politicien..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          style={{ padding: 8, marginRight: 10 }}
-        />
-        <button onClick={handleSearch}>Rechercher</button>
-      </div>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/collection" element={<CollectionPage />} />
+        <Route path="/combat" element={<FightPage />} />
+        <Route path="/deck" element={<DeckPage />} />
+      </Routes>
 
-      {loading && <p>Chargement...</p>}
+      <Navbar />
 
-      {!loading && politicians.length > 0 && (
-        <div>
-          <h2>Résultats</h2>
-          <ul>
-            {politicians.map((p) => (
-              <li key={p.id} style={{ marginBottom: 8 }}>
-                <button onClick={() => handleSelect(p.slug)}>
-                  {p.fullName}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {selected && (
-        <div style={{ marginTop: 30 }}>
-          <h2>Détails</h2>
-
-          {selected.photoUrl && (
-            <img
-              src={selected.photoUrl}
-              alt={selected.fullName}
-              width={150}
-            />
-          )}
-
-          <p><b>Nom :</b> {selected.fullName}</p>
-          <p><b>Prénom :</b> {selected.firstName}</p>
-          <p><b>Nom de famille :</b> {selected.lastName}</p>
-          <p><b>Date de naissance :</b> {selected.birthDate}</p>
-          <p><b>Lieu de naissance :</b> {selected.birthPlace}</p>
-          <p>
-            <b>Parti actuel :</b>{" "}
-            <span style={{ color: selected.currentParty?.color }}>
-              {selected.currentParty?.name}
-            </span>
-          </p>
-        </div>
-      )}
-    </div>
+    </BrowserRouter>
   );
 }
+
+export default App;

@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Headbar from "../components/Headbar";
 import Box from "@mui/material/Box";
 import Input from "@mui/material/Input";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import PoligraphService from "../services/poligraphService";
-
 import PoliticianCard from "../components/PoliticianCard";
 
 const ariaLabel = { "aria-label": "description" };
@@ -14,6 +14,33 @@ const ariaLabel = { "aria-label": "description" };
 export default function CollectionPage() {
   const [search, setSearch] = useState("");
   const [politicians, setPoliticians] = useState([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+
+  const observer = useRef();
+
+  const lastElementRef = useCallback(
+    (node) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      });
+
+      if (node) observer.current.observe(node);
+    },
+    [loading, hasMore],
+  );
+
+  useEffect(() => {
+    setPoliticians([]);
+    setPage(1);
+    setHasMore(true);
+  }, [search]);
 
   useEffect(() => {
     async function loadPoliticians() {
@@ -22,13 +49,30 @@ export default function CollectionPage() {
         return;
       }
 
-      const results = await PoligraphService.searchPoliticiansByName(search);
+      setLoading(true);
+      const results = await PoligraphService.searchPoliticiansByName(
+        search,
+        page,
+      );
 
-      setPoliticians(results);
+      setPoliticians((prev) => {
+        const allPoliticians = [...prev, ...results];
+        const uniquePoliticians = Array.from(
+          new Map(allPoliticians.map((p) => [p.slug, p])).values(),
+        );
+
+        return uniquePoliticians;
+      });
+
+      if (results.length < 20) {
+        setHasMore(false);
+      }
+
+      setLoading(false);
     }
 
     loadPoliticians();
-  }, [search]);
+  }, [search, page]);
 
   return (
     <>
@@ -42,12 +86,32 @@ export default function CollectionPage() {
           onChange={(e) => setSearch(e.target.value)}
         />
         <List>
-          {politicians.map((politician) => (
-            <ListItem key={politician.slug} disablePadding>
-              <PoliticianCard data={politician} />
-            </ListItem>
-          ))}
+          {politicians.map((politician, index) => {
+            if (politicians.length === index + 1) {
+              return (
+                <ListItem
+                  ref={lastElementRef}
+                  key={politician.slug}
+                  disablePadding
+                >
+                  <PoliticianCard data={politician} />
+                </ListItem>
+              );
+            } else {
+              return (
+                <ListItem key={politician.slug} disablePadding>
+                  <PoliticianCard data={politician} />
+                </ListItem>
+              );
+            }
+          })}
         </List>
+
+        {loading && (
+          <Box sx={{ display: "flex", justifyContent: "center", p: 2 }}>
+            <CircularProgress size={24} />
+          </Box>
+        )}
       </Box>
     </>
   );

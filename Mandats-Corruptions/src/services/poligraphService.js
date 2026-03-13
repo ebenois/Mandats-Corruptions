@@ -38,9 +38,9 @@ export class Politician {
 }
 
 class PoligraphService {
-  async searchPoliticiansByName(name) {
+  async searchPoliticiansByName(name, page = 1) {
     const response = await this.fetchFromApi(
-      `${rootEndpoint}/politiques?search=${encodeURIComponent(name.trim())}`,
+      `${rootEndpoint}/politiques?search=${encodeURIComponent(name.trim())}&sort=prominence&page=${page}`,
     );
 
     if (!response || !Array.isArray(response.data)) {

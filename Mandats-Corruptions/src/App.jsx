@@ -1,9 +1,6 @@
 import { useState } from "react";
 import poligraphService from "./services/poligraphService";
-import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "./assets/firebase"; 
-
-export const firebaseApp = initializeApp(firebaseConfig);
+import "./assets/firebase";
 
 export default function App() {
   const [search, setSearch] = useState("");

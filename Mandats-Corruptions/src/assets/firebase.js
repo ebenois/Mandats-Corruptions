@@ -1,4 +1,6 @@
-const firebaseConfig = {
+import { initializeApp } from "firebase/app";
+
+export const firebaseConfig = {
   apiKey: "AIzaSyD8Y3Th36woN6FvaHwc1N9FZrPP1ZqNRr4",
   authDomain: "mandats-corruptions.firebaseapp.com",
   databaseURL: "https://mandats-corruptions-default-rtdb.europe-west1.firebasedatabase.app",
@@ -8,4 +10,4 @@ const firebaseConfig = {
   appId: "1:453545701762:web:9062c88bfb45f176465f9b"
 };
 
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);

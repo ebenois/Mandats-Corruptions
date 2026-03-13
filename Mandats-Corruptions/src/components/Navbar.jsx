@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
@@ -19,45 +18,34 @@ export default function Navbar() {
   };
 
   return (
-    <Box sx={{ pb: 6 }}>
-      <Paper
-        sx={{
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          backgroundColor: "white",
-        }}
-        variant="outlined"
-        square
-      >
-        <BottomNavigation
-          sx={{
-            width: "100%",
-            bgcolor: "#FFFFFF",
-          }}
-          value={value}
-          onChange={handleChange}
-        >
-          <BottomNavigationAction
-            label="Collection"
-            value="collection"
-            icon={<ShoppingCartIcon />}
-          />
+    <Paper
+      sx={{
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        right: 0,
+      }}
+      elevation={3}
+    >
+      <BottomNavigation value={value} onChange={handleChange}>
+        <BottomNavigationAction
+          label="Collection"
+          value="collection"
+          icon={<ShoppingCartIcon />}
+        />
 
-          <BottomNavigationAction
-            label="Combat"
-            value="combat"
-            icon={<SportsMmaIcon />}
-          />
+        <BottomNavigationAction
+          label="Combat"
+          value="combat"
+          icon={<SportsMmaIcon />}
+        />
 
-          <BottomNavigationAction
-            label="Deck"
-            value="deck"
-            icon={<CollectionsBookmarkIcon />}
-          />
-        </BottomNavigation>
-      </Paper>
-    </Box>
+        <BottomNavigationAction
+          label="Deck"
+          value="deck"
+          icon={<CollectionsBookmarkIcon />}
+        />
+      </BottomNavigation>
+    </Paper>
   );
 }

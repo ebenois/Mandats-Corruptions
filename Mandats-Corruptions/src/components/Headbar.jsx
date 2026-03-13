@@ -1,26 +1,17 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
 
 export default function Headbar({ title }) {
   return (
-    <Box sx={{ pt: 6 }}>
-      <Paper
-        sx={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          backgroundColor: "white",
-          color: "black",
-          fontFamily: "Arial",
-          textAlign: "center",
-        }}
-        variant="outlined"
-        square
-      >
-        <p>{title}</p>
-      </Paper>
-    </Box>
+    <>
+      <AppBar position="fixed" color="inherit" elevation={1}>
+        <Toolbar sx={{ justifyContent: "center" }}>
+          <Typography variant="h6">{title}</Typography>
+        </Toolbar>
+      </AppBar>
+      <Toolbar />
+    </>
   );
 }

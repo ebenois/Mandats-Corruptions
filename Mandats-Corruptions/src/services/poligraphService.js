@@ -2,7 +2,23 @@ const rootEndpoint = "/api";
 
 // Model class for a politician
 export class Politician {
-  constructor(id, slug, fullName, firstName, lastName, civility, birthDate, deathDate, birthPlace, photoUrl, currentParty, mandates, declarations, affairsCount, factchecksCount) {
+  constructor(
+    id,
+    slug,
+    fullName,
+    firstName,
+    lastName,
+    civility,
+    birthDate,
+    deathDate,
+    birthPlace,
+    photoUrl,
+    currentParty,
+    mandates,
+    declarations,
+    affairsCount,
+    factchecksCount,
+  ) {
     this.id = id;
     this.slug = slug;
     this.fullName = fullName;
@@ -22,40 +38,37 @@ export class Politician {
 }
 
 class PoligraphService {
-
   async searchPoliticiansByName(name) {
     const response = await this.fetchFromApi(
-      `${rootEndpoint}/politiques?search=${encodeURIComponent(name.trim())}`
+      `${rootEndpoint}/politiques?search=${encodeURIComponent(name.trim())}`,
     );
-  
+
     if (!response || !Array.isArray(response.data)) {
       return [];
     }
-  
+
     return this.createPoliticians(response.data);
   }
 
   async findPoliticianBySlug(slug) {
     const politician = await this.fetchFromApi(
-      `${rootEndpoint}/politiques/${slug}`
+      `${rootEndpoint}/politiques/${slug}`,
     );
 
     return this.createPolitician(politician);
   }
 
   async fetchFromApi(query) {
-  
     try {
       const response = await fetch(query);
-  
+
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-  
+
       const data = await response.json();
-  
+
       return data;
-  
     } catch (e) {
       console.error("API Error:", e);
       return null;
@@ -78,7 +91,7 @@ class PoligraphService {
       data.mandates,
       data.declarations,
       data.affairsCount,
-      data.factchecksCount
+      data.factchecksCount,
     );
   }
 

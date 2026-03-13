@@ -9,7 +9,6 @@ import DeckPage from "./pages/DeckPage";
 function App() {
   return (
     <BrowserRouter>
-
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/collection" element={<CollectionPage />} />
@@ -18,7 +17,6 @@ function App() {
       </Routes>
 
       <Navbar />
-
     </BrowserRouter>
   );
 }

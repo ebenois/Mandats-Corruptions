@@ -11,8 +11,8 @@ export default function Headbar({ title }) {
           top: 0,
           left: 0,
           right: 0,
-          backgroundColor: "purple",
-          color: "white",
+          backgroundColor: "white",
+          color: "black",
           fontFamily: "Arial",
           textAlign: "center",
         }}

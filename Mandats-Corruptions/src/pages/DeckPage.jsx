@@ -1,7 +1,9 @@
+import Headbar from "../components/Headbar";
+
 export default function DeckPage() {
   return (
     <>
-      <p>DeckPage</p>
+      <Headbar title="Votre deck" />
     </>
   );
 }

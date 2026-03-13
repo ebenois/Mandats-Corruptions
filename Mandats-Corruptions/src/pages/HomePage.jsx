@@ -1,7 +1,9 @@
+import Headbar from "../components/Headbar";
+
 export default function CollectionPage() {
   return (
     <>
-      <p>HomePage</p>
+      <Headbar title="Acceuil" />
     </>
   );
 }

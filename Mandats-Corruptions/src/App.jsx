@@ -1,121 +1,90 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState } from "react";
+import poligraphService from "./services/poligraphService";
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "./assets/firebase"; 
 
-function App() {
-  const [count, setCount] = useState(0)
+export const firebaseApp = initializeApp(firebaseConfig);
+
+export default function App() {
+  const [search, setSearch] = useState("");
+  const [politicians, setPoliticians] = useState([]);
+  const [selected, setSelected] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleSearch = async () => {
+    if (!search.trim()) return;
+
+    setLoading(true);
+    const results = await poligraphService.searchPoliticiansByName(search);
+    setPoliticians(results);
+    setSelected(null);
+    setLoading(false);
+  };
+
+  const handleSelect = async (slug) => {
+    setLoading(true);
+    const politician = await poligraphService.findPoliticianBySlug(slug);
+    setSelected(politician);
+    setLoading(false);
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
+    <div style={{ fontFamily: "Arial", padding: 20 }}>
+      <h1>Test API Poligraph</h1>
+
+      <div style={{ marginBottom: 20 }}>
+        <input
+          type="text"
+          placeholder="Rechercher un politicien..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          style={{ padding: 8, marginRight: 10 }}
+        />
+        <button onClick={handleSearch}>Rechercher</button>
+      </div>
+
+      {loading && <p>Chargement...</p>}
+
+      {!loading && politicians.length > 0 && (
         <div>
-          <h1>Get started</h1>
+          <h2>Résultats</h2>
+          <ul>
+            {politicians.map((p) => (
+              <li key={p.id} style={{ marginBottom: 8 }}>
+                <button onClick={() => handleSelect(p.slug)}>
+                  {p.fullName}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {selected && (
+        <div style={{ marginTop: 30 }}>
+          <h2>Détails</h2>
+
+          {selected.photoUrl && (
+            <img
+              src={selected.photoUrl}
+              alt={selected.fullName}
+              width={150}
+            />
+          )}
+
+          <p><b>Nom :</b> {selected.fullName}</p>
+          <p><b>Prénom :</b> {selected.firstName}</p>
+          <p><b>Nom de famille :</b> {selected.lastName}</p>
+          <p><b>Date de naissance :</b> {selected.birthDate}</p>
+          <p><b>Lieu de naissance :</b> {selected.birthPlace}</p>
           <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
+            <b>Parti actuel :</b>{" "}
+            <span style={{ color: selected.currentParty?.color }}>
+              {selected.currentParty?.name}
+            </span>
           </p>
         </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      )}
+    </div>
+  );
 }
-
-export default App

@@ -6,11 +6,11 @@ import HomePage from "./pages/HomePage";
 import CollectionPage from "./pages/CollectionPage";
 import FightPage from "./pages/FightPage";
 import DeckPage from "./pages/DeckPage";
+import "./App.css";
 
 function App() {
   return (
     <BrowserRouter>
-      {/* espace pour la navbar */}
       <Box sx={{ pb: 7 }}>
         <Routes>
           <Route path="/" element={<HomePage />} />

@@ -7,6 +7,8 @@ import ListItem from "@mui/material/ListItem";
 
 import PoligraphService from "../services/poligraphService";
 
+import PoliticianCard from "../components/PoliticianCard";
+
 const ariaLabel = { "aria-label": "description" };
 
 export default function CollectionPage() {
@@ -31,19 +33,18 @@ export default function CollectionPage() {
   return (
     <>
       <Headbar title="Collection" />
-
-      <Input
-        placeholder="Entrer un nom"
-        inputProps={ariaLabel}
-        fullWidth
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
-      <Box>
+      <Box sx={{ p: 2 }}>
+        <Input
+          placeholder="Entrer un nom"
+          inputProps={ariaLabel}
+          fullWidth
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
         <List>
           {politicians.map((politician) => (
             <ListItem key={politician.slug} disablePadding>
-              <p>{politician.fullName}</p>
+              <PoliticianCard data={politician} />
             </ListItem>
           ))}
         </List>

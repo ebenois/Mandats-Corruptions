@@ -19,10 +19,6 @@ export function DeckProvider({ children }) {
       const exists = prev.some((p) => p.slug === politician.slug);
 
       if (exists) return prev.filter((p) => p.slug !== politician.slug);
-      if (prev.length >= maxDeckSize) {
-        alert(`Le deck est limité à ${maxDeckSize} cartes`);
-        return prev;
-      }
 
       return [...prev, politician];
     });

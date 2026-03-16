@@ -15,10 +15,10 @@ function App() {
         <Box sx={{ pb: 7 }}>
           <Routes>
             <Route path="/collection" element={<CollectionPage />} />
-            <Route path="/combat" element={<FightPage />} />
+            <Route path="/play" element={<FightPage />} />
             <Route path="/deck" element={<DeckPage />} />
 
-            <Route path="/" element={<Navigate to="/combat" />} />
+            <Route path="/" element={<Navigate to="/play" />} />
           </Routes>
         </Box>
 

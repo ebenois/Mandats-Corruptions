@@ -38,8 +38,8 @@ export default function Navbar() {
         />
 
         <BottomNavigationAction
-          label="Combat"
-          value="combat"
+          label="Play"
+          value="play"
           icon={<SportsMmaIcon />}
         />
 

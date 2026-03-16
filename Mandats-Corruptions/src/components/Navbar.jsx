@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
@@ -9,13 +9,16 @@ import CollectionsBookmarkIcon from "@mui/icons-material/CollectionsBookmark";
 import SportsMmaIcon from "@mui/icons-material/SportsMma";
 
 export default function Navbar() {
-  const [value, setValue] = React.useState("collection");
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
     navigate("/" + newValue);
   };
+
+  // récupère la route actuelle
+  const currentValue =
+    location.pathname === "/" ? "combat" : location.pathname.replace("/", "");
 
   return (
     <Paper
@@ -27,7 +30,7 @@ export default function Navbar() {
       }}
       elevation={3}
     >
-      <BottomNavigation value={value} onChange={handleChange}>
+      <BottomNavigation value={currentValue} onChange={handleChange}>
         <BottomNavigationAction
           label="Collection"
           value="collection"

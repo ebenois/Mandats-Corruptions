@@ -38,6 +38,17 @@ export class Politician {
 }
 
 class PoligraphService {
+  async getProminentPoliticians(page = 1) {
+    const response = await this.fetchFromApi(
+      `${rootEndpoint}/politiques?sort=prominence&page=${page}`,
+    );
+
+    if (!response || !Array.isArray(response.data)) {
+      return [];
+    }
+
+    return this.createPoliticians(response.data);
+  }
   async searchPoliticiansByName(name, page = 1) {
     const response = await this.fetchFromApi(
       `${rootEndpoint}/politiques?search=${encodeURIComponent(name.trim())}&sort=prominence&page=${page}`,

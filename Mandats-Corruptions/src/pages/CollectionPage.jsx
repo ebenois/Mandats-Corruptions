@@ -44,16 +44,11 @@ export default function CollectionPage() {
 
   useEffect(() => {
     async function loadPoliticians() {
-      if (!search.trim()) {
-        setPoliticians([]);
-        return;
-      }
-
       setLoading(true);
-      const results = await PoligraphService.searchPoliticiansByName(
-        search,
-        page,
-      );
+
+      const results = search.trim()
+        ? await PoligraphService.searchPoliticiansByName(search, page)
+        : await PoligraphService.getProminentPoliticians(page);
 
       setPoliticians((prev) => {
         const allPoliticians = [...prev, ...results];

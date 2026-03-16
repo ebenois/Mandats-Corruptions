@@ -12,11 +12,11 @@ export default function DeckPage() {
 
   return (
     <>
-      <Headbar title={`Votre deck (${deck.length}/${maxDeckSize})`} />
+      <Headbar title={`Votre gouvernement (${deck.length}/${maxDeckSize})`} />
 
       <Box sx={{ p: 2 }}>
         {deck.length === 0 ? (
-          <Typography variant="body1">Votre deck est vide.</Typography>
+          <Typography variant="body1">Votre gouvernement est vide.</Typography>
         ) : (
           <List>
             {deck.map((politician) => (

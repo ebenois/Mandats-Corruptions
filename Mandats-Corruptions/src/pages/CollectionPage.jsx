@@ -10,8 +10,6 @@ import { useDeck } from "../context/DeckContext";
 import PoligraphService from "../services/poligraphService";
 import PoliticianCard from "../components/PoliticianCard";
 
-const ariaLabel = { "aria-label": "description" };
-
 export default function CollectionPage() {
   const [search, setSearch] = useState("");
   const [waitBeforeSearch, setWaitBeforeSearch] = useState("");
@@ -81,7 +79,7 @@ export default function CollectionPage() {
       <Headbar title="Collection" />
       <Box sx={{ p: 2 }}>
         <Input
-          placeholder="Entrer un nom"
+          placeholder="Entrer un nom..."
           fullWidth
           value={search}
           onChange={(e) => setSearch(e.target.value)}

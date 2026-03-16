@@ -14,7 +14,7 @@ const ariaLabel = { "aria-label": "description" };
 
 export default function CollectionPage() {
   const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [waitBeforeSearch, setWaitBeforeSearch] = useState("");
   const [politicians, setPoliticians] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -24,7 +24,7 @@ export default function CollectionPage() {
   const observer = useRef();
 
   useEffect(() => {
-    const handler = setTimeout(() => setDebouncedSearch(search), 500);
+    const handler = setTimeout(() => setWaitBeforeSearch(search), 500);
     return () => clearTimeout(handler);
   }, [search]);
 
@@ -32,14 +32,14 @@ export default function CollectionPage() {
     setPoliticians([]);
     setPage(1);
     setHasMore(true);
-  }, [debouncedSearch]);
+  }, [waitBeforeSearch]);
 
   useEffect(() => {
     async function loadPoliticians() {
       setLoading(true);
 
-      const results = debouncedSearch.trim()
-        ? await PoligraphService.searchPoliticiansByName(debouncedSearch, page)
+      const results = waitBeforeSearch.trim()
+        ? await PoligraphService.searchPoliticiansByName(waitBeforeSearch, page)
         : await PoligraphService.getProminentPoliticians(page);
 
       setPoliticians((prev) => {
@@ -52,7 +52,7 @@ export default function CollectionPage() {
     }
 
     loadPoliticians();
-  }, [debouncedSearch, page]);
+  }, [waitBeforeSearch, page]);
 
   const lastElementRef = useCallback(
     (node) => {
